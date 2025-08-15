@@ -8,9 +8,15 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddCircle
+import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -45,26 +51,36 @@ class MainActivity : ComponentActivity() {
  */
 @Composable
 fun Greeting(name: String) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxSize()
-    ) {
-        Image(
-            painter = painterResource(R.drawable.ic_launcher_foreground),
-            contentDescription = null,
-            modifier = Modifier.background(Color.Blue)
-        )
-        Text(
-            text = "Hello $name!",
-            textAlign = TextAlign.Center,
-            color = Color.Blue,
-            fontSize = 24.sp,
-            // Modifier is used to apply changes to the view's appearance
-            modifier = Modifier // Here, functions are called sequentially
-                .padding(16.dp)
-                .wrapContentHeight(Alignment.CenterVertically) // Centers vertically
-        )
+    LazyColumn { // For making lazy loading lists (vertically) - items which are not on the screen are not calculated/rendered, just like RecyclerView's behavior in xml
+        items(20) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.ic_launcher_foreground),
+                    contentDescription = null,
+                    modifier = Modifier.background(Color.Blue)
+                )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = "Hello $name!",
+                        textAlign = TextAlign.Center,
+                        color = Color.Blue,
+                        fontSize = 24.sp,
+                        // Modifier is used to apply changes to the view's appearance
+                        modifier = Modifier // Here, functions are called sequentially
+                            .padding(16.dp)
+                            .wrapContentHeight(Alignment.CenterVertically) // Centers vertically
+                    )
+                    Icon(
+                        imageVector = Icons.Default.AddCircle, contentDescription = null
+                    )
+                }
+                Divider(modifier = Modifier.padding(16.dp))
+            }
+        }
     }
 }
 
