@@ -9,18 +9,22 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -43,24 +47,55 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ComposeAppTheme {
-                val count = remember {
-                    mutableIntStateOf(0) // state refers to the value that is changed over time
-                }
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center,
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    Text(
-                        text = count.intValue.toString(), // Each time the value is changed, this composable is recomposed as well
-                        fontSize = 24.sp,
-                        modifier = Modifier.padding(16.dp)
-                    )
-                    Button(onClick = {
-                        count.intValue++
-                    }) { Text(text = "Add") }
-                }
+                AddNames()
+            }
+        }
+    }
+}
 
+@Composable
+fun AddNames() {
+    val name = remember {
+        mutableStateOf("")
+    }
+    val names = remember {
+        mutableStateListOf<String>()
+    }
+    Column(modifier = Modifier.fillMaxSize()) {
+        Spacer(modifier = Modifier.padding(16.dp))
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            OutlinedTextField(
+                value = name.value,
+                onValueChange = { text ->
+                    name.value = text
+                },
+                modifier = Modifier
+                    .padding(16.dp)
+                    .weight(1f)
+            )
+            Button(
+                modifier = Modifier.padding(0.dp, 0.dp, 16.dp, 0.dp),
+                onClick = {
+                    names.add(name.value)
+                    name.value = ""
+                }) {
+                Text(
+                    text = "Add"
+                )
+            }
+        }
+        Spacer(modifier = Modifier.padding(0.dp, 8.dp, 0.dp, 0.dp))
+        LazyColumn {
+            items(names) { currentName ->
+                Text(
+                    text = currentName,
+                    fontSize = 16.sp,
+                    modifier = Modifier.padding(16.dp)
+                )
+                Divider(modifier = Modifier.padding(16.dp, 0.dp, 16.dp, 0.dp))
             }
         }
     }
@@ -74,6 +109,6 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun GreetingPreview() {
     ComposeAppTheme {
-
+        AddNames()
     }
 }
